@@ -3,7 +3,7 @@
 
 const CACHE_NAME = 'lab-7-starter';
 
-const RECIPE_URLS = [
+const LINKS = [
     'https://introweb.tech/assets/json/1_50-thanksgiving-side-dishes.json',
     'https://introweb.tech/assets/json/2_roasting-turkey-breast-with-stuffing.json',
     'https://introweb.tech/assets/json/3_moms-cornbread-stuffing.json',
@@ -18,7 +18,7 @@ self.addEventListener('install', function (event) {
     caches.open(CACHE_NAME).then(function (cache) {
       // B6. TODO - Add all of the URLs from RECIPE_URLs here so that they are
       //            added to the cache when the ServiceWorker is installed
-      return cache.addAll(RECIPE_URLS);
+      return cache.addAll(LINKS);
     })
   );
 });
@@ -45,22 +45,20 @@ self.addEventListener('fetch', function (event) {
   //            above (CACHE_NAME)
   event.respondWith(
     caches.open(CACHE_NAME).then(function (cache) {
-      return cache.match(event.request).then(function (response) {
+      return cache.match(event.request).then(function (response_cache) {
         
-        if (response) {
-          return response;
+        if (response_cache) {
+          return response_cache;
         }
         
         
-        return fetch(event.request).then(function (networkResponse) {
-          
-          var clonedResponse = networkResponse.clone();
+        return fetch(event.request).then(function (response_net) {
           
           
-          cache.put(event.request, clonedResponse);
+          cache.put(event.request, response_net.clone());
           
           
-          return networkResponse;
+          return response_net;
         });
       });
     })

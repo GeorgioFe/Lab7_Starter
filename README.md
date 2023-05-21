@@ -2,4 +2,4 @@
 
 Georgio Feghali
 
-Page URL
+[Link to Published Site](https://georgiofe.github.io/Lab7_Starter/)
