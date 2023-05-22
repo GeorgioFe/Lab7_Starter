@@ -43,24 +43,12 @@ self.addEventListener('fetch', function (event) {
   /*******************************/
   // B7. TODO - Respond to the event by opening the cache using the name we gave
   //            above (CACHE_NAME)
-  event.respondWith(
-    caches.open(CACHE_NAME).then(function (cache) {
-      return cache.match(event.request).then(function (response_cache) {
-        
-        if (response_cache) {
-          return response_cache;
-        }
-        
-        
-        return fetch(event.request).then(function (response_net) {
-          
-          
+  event.respondWith(caches.open(CACHE_NAME).then((cache) => {
+      return cache.match(event.request).then((response_cache) => {
+        return response_cache || fetch(event.request).then((response_net) => {
           cache.put(event.request, response_net.clone());
-          
-          
           return response_net;
         });
       });
-    })
-  );
+  }));
 });
